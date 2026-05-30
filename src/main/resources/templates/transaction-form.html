@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Giao dich</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<main class="container py-4" style="max-width:720px">
+	<div class="card">
+		<div class="card-header">
+			<h4 class="mb-0" th:text="${transaction == null ? 'Them giao dich' : 'Sua giao dich'}"></h4>
+		</div>
+		<div class="card-body">
+			<form th:action="@{/transactions}" method="post">
+				<input type="hidden" name="action" th:value="${transaction == null ? 'add' : 'update'}">
+				<input type="hidden" name="id" th:if="${transaction != null}" th:value="${transaction.id}">
+				<div class="row g-3">
+					<div class="col-md-6">
+						<label class="form-label">Loai</label>
+						<select class="form-select" name="type" id="type">
+							<option value="expense" th:selected="${transaction == null || transaction.type == 'expense'}">Chi tieu</option>
+							<option value="income" th:selected="${transaction != null && transaction.type == 'income'}">Thu nhap</option>
+						</select>
+					</div>
+					<div class="col-md-6">
+						<label class="form-label">Danh muc</label>
+						<select class="form-select" name="categoryId" id="categoryId">
+							<option th:each="c : ${categories}" th:value="${c.id}" th:text="${c.name}"
+							        th:selected="${transaction != null && transaction.categoryId == c.id}"></option>
+						</select>
+					</div>
+					<div class="col-md-6">
+						<label class="form-label">So tien</label>
+						<input class="form-control" name="amount" type="number" step="0.01" required th:value="${transaction?.amount}">
+					</div>
+					<div class="col-md-6">
+						<label class="form-label">Ngay</label>
+						<input class="form-control" name="transactionDate" type="date" required th:value="${transaction?.transactionDate}">
+					</div>
+					<div class="col-12">
+						<label class="form-label">Mo ta</label>
+						<input class="form-control" name="description" th:value="${transaction?.description}">
+					</div>
+				</div>
+				<div class="d-flex gap-2 mt-4">
+					<button class="btn btn-primary" type="submit">Luu</button>
+					<a class="btn btn-secondary" th:href="@{/transactions}">Huy</a>
+				</div>
+			</form>
+		</div>
+	</div>
+</main>
+<script>
+document.getElementById('type').addEventListener('change', async (event) => {
+	const response = await fetch('/category/list?type=' + event.target.value);
+	const categories = await response.json();
+	const select = document.getElementById('categoryId');
+	select.innerHTML = categories.map((category) => `<option value="${category.id}">${category.name}</option>`).join('');
+});
+</script>
+</body>
+</html>

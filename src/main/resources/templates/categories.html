@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Danh muc</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<main class="container py-4">
+	<div class="d-flex justify-content-between mb-3">
+		<h3>Danh muc</h3>
+		<a class="btn btn-secondary" th:href="@{/dashboard}">Dashboard</a>
+	</div>
+	<div class="alert alert-success" th:if="${success}" th:text="${success}"></div>
+	<div class="alert alert-danger" th:if="${error}" th:text="${error}"></div>
+	<div class="row g-3">
+		<div class="col-md-4">
+			<div class="card">
+				<div class="card-header">Them danh muc</div>
+				<div class="card-body">
+					<form th:action="@{/category}" method="post">
+						<input class="form-control mb-2" name="name" placeholder="Ten danh muc" required>
+						<select class="form-select mb-3" name="type">
+							<option value="expense" th:selected="${selectedType == 'expense'}">Chi tieu</option>
+							<option value="income" th:selected="${selectedType == 'income'}">Thu nhap</option>
+						</select>
+						<button class="btn btn-primary w-100">Them</button>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-8">
+			<div class="mb-2">
+				<a class="btn btn-outline-danger btn-sm" th:href="@{/category(type='expense')}">Chi tieu</a>
+				<a class="btn btn-outline-success btn-sm" th:href="@{/category(type='income')}">Thu nhap</a>
+			</div>
+			<div class="card">
+				<table class="table table-striped mb-0">
+					<thead><tr><th>Ten</th><th>Loai</th><th></th></tr></thead>
+					<tbody>
+					<tr th:each="c : ${categories}">
+						<td th:text="${c.name}"></td>
+						<td th:text="${c.type}"></td>
+						<td class="text-end"><a class="btn btn-sm btn-outline-danger" th:href="@{/category(action='delete',id=${c.id},type=${selectedType})}">Xoa</a></td>
+					</tr>
+					<tr th:if="${#lists.isEmpty(categories)}"><td colspan="3" class="text-center text-muted">Chua co danh muc</td></tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</main>
+</body>
+</html>

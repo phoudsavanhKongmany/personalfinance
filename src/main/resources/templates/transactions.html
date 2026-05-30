@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Giao dich</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<main class="container py-4">
+	<div class="d-flex justify-content-between align-items-center mb-3">
+		<h3>Giao dich</h3>
+		<div class="d-flex gap-2">
+			<a class="btn btn-secondary" th:href="@{/dashboard}">Dashboard</a>
+			<a class="btn btn-success" th:href="@{/transactions/new}">Them</a>
+		</div>
+	</div>
+	<form class="row g-2 mb-3" method="get" th:action="@{/transactions}">
+		<div class="col-auto"><input class="form-control" type="number" name="month" min="1" max="12" th:value="${month}"></div>
+		<div class="col-auto"><input class="form-control" type="number" name="year" th:value="${year}"></div>
+		<div class="col-auto"><button class="btn btn-primary">Loc</button></div>
+	</form>
+	<div class="card">
+		<div class="table-responsive">
+			<table class="table table-striped mb-0">
+				<thead><tr><th>Ngay</th><th>Danh muc</th><th>Mo ta</th><th>Loai</th><th class="text-end">So tien</th><th></th></tr></thead>
+				<tbody>
+				<tr th:each="t : ${transactions}">
+					<td th:text="${t.transactionDate}"></td>
+					<td th:text="${t.categoryName}"></td>
+					<td th:text="${t.description}"></td>
+					<td th:text="${t.type}"></td>
+					<td class="text-end" th:text="${#numbers.formatDecimal(t.amount, 0, 'COMMA', 0, 'POINT')}"></td>
+					<td class="text-end">
+						<a class="btn btn-sm btn-outline-primary" th:href="@{/transaction(action='edit',id=${t.id})}">Sua</a>
+						<a class="btn btn-sm btn-outline-danger" th:href="@{/transaction(action='delete',id=${t.id},month=${month},year=${year})}">Xoa</a>
+					</td>
+				</tr>
+				<tr th:if="${#lists.isEmpty(transactions)}"><td colspan="6" class="text-center text-muted">Chua co giao dich</td></tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</main>
+</body>
+</html>

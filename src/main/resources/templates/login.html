@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Dang nhap</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<main class="container py-5" style="max-width:420px">
+	<div class="card shadow-sm">
+		<div class="card-header bg-primary text-white text-center">
+			<h4 class="mb-0">Quan ly Tai chinh</h4>
+		</div>
+		<div class="card-body">
+			<div class="alert alert-danger" th:if="${error}" th:text="${error}"></div>
+			<div class="alert alert-success" th:if="${success}" th:text="${success}"></div>
+			<form th:action="@{/auth}" method="post">
+				<input type="hidden" name="action" value="login">
+				<div class="mb-3">
+					<label class="form-label">Ten dang nhap</label>
+					<input class="form-control" name="username" required>
+				</div>
+				<div class="mb-3">
+					<label class="form-label">Mat khau</label>
+					<input class="form-control" type="password" name="password" required>
+				</div>
+				<button class="btn btn-primary w-100" type="submit">Dang nhap</button>
+			</form>
+			<hr>
+			<a class="btn btn-outline-secondary w-100" th:href="@{/register}">Tao tai khoan moi</a>
+		</div>
+	</div>
+</main>
+</body>
+</html>
